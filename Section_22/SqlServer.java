@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 public class SqlServer {
 	private Connection connection;
 	private Statement statement;
+	ResultSet rSet;
 	private String URl = "jdbc:sqlserver://localhost:1433;";
 	String DataBaseName = "Book";
 	String TableName = "book";
@@ -23,7 +24,6 @@ public class SqlServer {
 	private String password = "sxd";
 	public SqlServer() {
 		//连接操作
-		
 		makeConnection(DataBaseName);
 		//建立新的数据库
 		if(!createDataBase(DataBaseName)) {
@@ -42,6 +42,7 @@ public class SqlServer {
 
 	private void closeConnection() {
 		try {
+			rSet.close();
 			statement.close();
 			connection.close();
 		} catch (SQLException e) {
@@ -93,7 +94,7 @@ public class SqlServer {
 	private boolean isDBExist(String DataBaseName) {
 		String sql = "select * from sysdatabases where name='" + DataBaseName + "'";
 		try {
-			ResultSet rSet = statement.executeQuery(sql);
+			rSet = statement.executeQuery(sql);
 			if(rSet.next()) {
 				return true;
 			} else {
