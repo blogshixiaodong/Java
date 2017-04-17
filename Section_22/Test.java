@@ -19,6 +19,7 @@ public class Test {
             conn = DriverManager.getConnection(url, "sa", "sxd");
             // 建立Statement对象
             stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+            
             /**
              * Statement createStatement() 创建一个 Statement 对象来将 SQL 语句发送到数据库。
              */

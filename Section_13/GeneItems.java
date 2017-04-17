@@ -10,6 +10,7 @@ public class GeneItems<T1, T2, T3> {
 		firstObj = Obj1;
 		secondObj = Obj2;
 		thirdObj = Obj3;
+		
 	}
 
 	public T1 getFirstObj() {
