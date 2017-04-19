@@ -11,6 +11,7 @@ import java.net.URLConnection;
 
 public class Function {
 	public static void main(String[] args) throws IOException {
+	
 		URL url = new URL("https://blogshixiaodong.github.io/");
 		URLConnection urlConnection = url.openConnection();
          System.out.println("URL Îª£º" + url.toString());
