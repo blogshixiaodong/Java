@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.time.Period;
+import java.util.Scanner;
 
 /*
  * 客户端
@@ -19,16 +20,30 @@ public class Client {
 		// 1. 创建客户端Socket，指定服务器地址以及端口
 		Socket socket = new Socket("localhost", 8888);
 		OutputStream os = socket.getOutputStream();
+		Scanner scanner = new Scanner(System.in);
 		PrintWriter pw = new PrintWriter(os);
-		pw.write("用户名：admin； 密码：sxd");
+		
+		String info = "用户admin已连接: ";
+		System.out.println("已连接服务器");
+		
+		pw.println(info);
+		pw.flush();
+		while(!info.equalsIgnoreCase("Exit")) {
+			info = scanner.nextLine();	
+			pw.println("来自用户admin的信息: " + info);
+			pw.flush();
+		}
+		
+		System.out.println("已断开和服务器的链接");
+		pw.println("用户admin已断开连接");
 		pw.flush();
 		socket.shutdownOutput();
 		
 		InputStream is = socket.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
-		String info = null;
-		while((info = br.readLine()) != null) {
+		String infos = null;
+		while((infos = br.readLine()) != null) {
 			System.out.println("服务端信息：" + info);
 		}
 		
