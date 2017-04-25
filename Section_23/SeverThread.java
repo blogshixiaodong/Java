@@ -11,6 +11,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
+
+import javax.xml.crypto.Data;
 
 public class SeverThread extends Thread {
 	Socket socket = null;
@@ -23,23 +26,52 @@ public class SeverThread extends Thread {
 		InputStream is = null;
 		InputStreamReader isr = null;
 		BufferedReader br = null;
+		Scanner scanner = null;
+		
 		String info = null;
 		OutputStream os = null;
 		PrintWriter pw = null;
 		try {
+			//获取客户端字节输入流
 			is = socket.getInputStream();
+			//字节流->字符流
 			isr = new InputStreamReader(is);
+			//缓冲区
 			br = new BufferedReader(isr);
-			info = null;
-			while((info = br.readLine()) != null) {
-				System.out.println("Message: " + info);
-			}
 			
-			socket.shutdownInput();
+			scanner  = new Scanner(is);
+			
+			//服务端输出流
 			os = socket.getOutputStream();
-			pw = new PrintWriter(os);
-			pw.write("欢迎");
-			pw.flush();
+			//打印流
+			pw = new PrintWriter(os, true);
+			
+			info = null;
+			
+			while(scanner.hasNextLine()) {
+				info = scanner.nextLine();
+				System.out.println("From Client: " + info);
+				if(info.equalsIgnoreCase("exit")) {
+					socket.shutdownInput();
+					pw.println("Bye");
+					pw.flush();
+					break;
+				}
+				pw.println("Recevie!");
+				pw.flush();
+			}
+			/*while(true) {
+				while((info = br.readLine()) != null) {
+					System.out.println("Message: " + info);
+				}
+				if(info.equalsIgnoreCase("exit")) {
+					socket.shutdownInput();	
+					return;
+				}
+				pw.println("Recviced!");
+				pw.flush();
+			}*/
+				
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {

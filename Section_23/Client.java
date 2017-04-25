@@ -19,15 +19,37 @@ public class Client {
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		// 1. 创建客户端Socket，指定服务器地址以及端口
 		Socket socket = new Socket("localhost", 8888);
+		
+		//建立客户端输出流
 		OutputStream os = socket.getOutputStream();
-		Scanner scanner = new Scanner(System.in);
 		PrintWriter pw = new PrintWriter(os);
 		
-		String info = "用户admin已连接: ";
+		//获取服务端输入流
+		InputStream is = socket.getInputStream();
+		InputStreamReader isr = new InputStreamReader(is);
+		BufferedReader br = new BufferedReader(isr);
+		
+		//键盘输入
+		Scanner scanner = new Scanner(System.in);
+		
+		
+		String info = "用户User3已连接: ";
 		System.out.println("已连接服务器");
 		
 		pw.println(info);
 		pw.flush();
+		
+		
+		
+		while(scanner.hasNext()) {
+			String line = scanner.nextLine();
+			pw.println(line);
+			pw.flush();
+			line = br.readLine();
+			System.out.println("From Server: " + line);
+			
+		}
+		/*
 		while(!info.equalsIgnoreCase("Exit")) {
 			info = scanner.nextLine();	
 			pw.println("来自用户admin的信息: " + info);
@@ -39,20 +61,20 @@ public class Client {
 		pw.flush();
 		socket.shutdownOutput();
 		
-		InputStream is = socket.getInputStream();
-		InputStreamReader isr = new InputStreamReader(is);
-		BufferedReader br = new BufferedReader(isr);
+		
+		
 		String infos = null;
 		while((infos = br.readLine()) != null) {
 			System.out.println("服务端信息：" + info);
 		}
 		
-		
+		*/
 		//关闭资源
 		br.close();
 		isr.close();
 		is.close();
 		
+		scanner.close();
 		pw.close();
 		os.close();
 		socket.close();
